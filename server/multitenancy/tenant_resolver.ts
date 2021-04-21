@@ -46,9 +46,7 @@ export function resolveTenant(
   if (query && (query.security_tenant || query.securitytenant)) {
     selectedTenant = query.security_tenant ? query.security_tenant : query.securitytenant;
   } else if (request.headers.securitytenant || request.headers.security_tenant) {
-    selectedTenant = request.headers.securitytenant
-      ? (request.headers.securitytenant as string)
-      : (request.headers.security_tenant as string);
+    selectedTenant = URLEncoder.decode(request.headers.securitytenant? (request.headers.securitytenant as string) : (request.headers.security_tenant as string), "UTF-8")
   } else if (isValidTenant(cookie.tenant)) {
     selectedTenant = cookie.tenant;
   } else {
