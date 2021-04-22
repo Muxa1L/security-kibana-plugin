@@ -158,7 +158,7 @@ export abstract class AuthenticationType implements IAuthenticationType {
           });
         }
         // set tenant in header
-        Object.assign(authHeaders, { securitytenant: tenant });
+        Object.assign(authHeaders, { securitytenant: encodeURIComponent(tenant) });
 
         // set tenant to cookie
         if (tenant !== cookie!.tenant) {
