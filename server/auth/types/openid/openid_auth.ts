@@ -86,13 +86,6 @@ export class OpenIdAuthentication extends AuthenticationType {
 
   private async init() {
     try {
-      const response = await this.wreckClient.get(this.openIdConnectUrl);
-      const payload = JSON.parse(response.payload as string);
-
-      this.openIdAuthConfig.authorizationEndpoint = payload.authorization_endpoint;
-      this.openIdAuthConfig.tokenEndpoint = payload.token_endpoint;
-      this.openIdAuthConfig.endSessionEndpoint = payload.end_session_endpoint || undefined;
-
       const routes = new OpenIdAuthRoutes(
         this.router,
         this.config,
@@ -103,6 +96,12 @@ export class OpenIdAuthentication extends AuthenticationType {
         this.wreckClient
       );
       routes.setupRoutes();
+      const response = await this.wreckClient.get(this.openIdConnectUrl);
+      const payload = JSON.parse(response.payload as string);
+
+      this.openIdAuthConfig.authorizationEndpoint = payload.authorization_endpoint;
+      this.openIdAuthConfig.tokenEndpoint = payload.token_endpoint;
+      this.openIdAuthConfig.endSessionEndpoint = payload.end_session_endpoint || undefined;
     } catch (error) {
       this.logger.error(error); // TODO: log more info
       throw new Error('Failed when trying to obtain the endpoints from your IdP');
